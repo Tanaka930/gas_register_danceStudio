@@ -9,7 +9,7 @@ function onFormSubmit(e) {
 
       console.log(e.values)
 
-      for (var i = 12; i <= 16; i++) {
+      for (var i = 10; i <= 14; i++) {
         if (e.values[i] !== "") {
           console.log(i)
           var mama = KanriSheet(e.values[i], e.values[2])
@@ -41,7 +41,7 @@ function onFormSubmit(e) {
           // 電話番号
           sheet.getRange(targetRow, 8).setValue(e.values[8]);
           // 備考
-          sheet.getRange(targetRow, 9).setValue(e.values[10]);
+          sheet.getRange(targetRow, 9).setValue(e.values[15]);
         }
       };
     }
@@ -62,17 +62,29 @@ function KanriSheet(oneClass, name) {
   var trueLength = SearchCount(allClassList)
   console.log('trueLength: ' + trueLength)
 
+  var totalNumber = trueLength + 2
+
+  var BaseAbc = NumberToAbc(String(totalNumber))
+  console.log("BaseAbc:" + BaseAbc)
+
+  var graylist = CountGray(allClassList)
+
+  var mamaNum = graylist[2] - graylist[1] -1;
+  console.log("mama" + mamaNum)
+  var littleNum = graylist[1] - graylist[0] -1;
+  console.log("littleNum" + littleNum)
+
   if (oneClass == "Jazz Yukana  一般(ママ)") {
     var trgRow = sheet.getLastRow() + 1;
     console.log('trgRow: ' + trgRow)
 
     sheet.getRange(trgRow, 1).setValue(name);
-    sheet.getRange(trgRow, 2).setFormula("=sum(Y" + trgRow + ":AC" + trgRow + ")");
-    sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":W" + trgRow + ")");
-    // sheet.getRange(trgRow, trueLength + 4).setFormula("=sum(C" + trgRow + ":U" + trgRow + ")*5000");
-    // sheet.getRange(trgRow, trueLength + 5).setFormula("=sum(V" + trgRow + ":W" + trgRow + ")*4000");
-    // sheet.getRange(trgRow, trueLength + 6).setFormula("=if(X" + trgRow + ">=3,-1000*(X" + trgRow + "-2),0)");
-    sheet.getRange(trgRow, trueLength + 8).setFormula("=sum(C" + trgRow + ":U" + trgRow + ")*2000");
+    // sheet.getRange(trgRow, 2).setFormula("=sum(Z" + trgRow + ":AD" + trgRow + ")");
+    sheet.getRange(trgRow, 2).setFormula("=sum(" + NumberToAbc(String(totalNumber + 1)) + trgRow + ":" + NumberToAbc(String(totalNumber + 5)) + trgRow + ")");
+    // sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":X" + trgRow + ")");
+    sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":" + NumberToAbc(String(totalNumber - 2)) + trgRow + ")");
+    // sheet.getRange(trgRow, trueLength + 8).setFormula("=sum(C" + trgRow + ":V" + trgRow + ")*2000");
+    sheet.getRange(trgRow, trueLength + 8).setFormula("=sum(" + NumberToAbc(String(totalNumber - mamaNum -1)) + trgRow + ":" + NumberToAbc(String(totalNumber - 2)) + trgRow + ")*2000");
     sheet.insertRowAfter(trgRow);
 
     for (var i = 0; i < trueLength; i++) {
@@ -90,13 +102,22 @@ function KanriSheet(oneClass, name) {
     var trgRow = nameList.indexOf("ママさんクラス"); // returns number
     console.log('trgRow: ' + trgRow)
 
-
     sheet.getRange(trgRow, 1).setValue(name)
-    sheet.getRange(trgRow, 2).setFormula("=sum(Y" + trgRow + ":AC" + trgRow + ")");
-    sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":W" + trgRow + ")");
-    sheet.getRange(trgRow, trueLength + 4).setFormula("=sum(C" + trgRow + ":U" + trgRow + ")*5000");
-    sheet.getRange(trgRow, trueLength + 5).setFormula("=sum(V" + trgRow + ":W" + trgRow + ")*4000");
-    sheet.getRange(trgRow, trueLength + 6).setFormula("=if(X" + trgRow + ">=3,-1000*(X" + trgRow + "-2),0)");
+    // sheet.getRange(trgRow, 2).setFormula("=sum(Z" + trgRow + ":AC" + trgRow + ")");
+    sheet.getRange(trgRow, 2).setFormula("=sum(" + NumberToAbc(String(totalNumber + 1)) + trgRow + ":" + NumberToAbc(String(totalNumber + 4)) + trgRow + ")");
+
+    // sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":X" + trgRow + ")");
+    sheet.getRange(trgRow, trueLength + 3).setFormula("=COUNTA(C" + trgRow + ":" + NumberToAbc(String(totalNumber - 2)) + trgRow + ")");
+
+    // sheet.getRange(trgRow, trueLength + 4).setFormula("=sum(C" + trgRow + ":V" + trgRow + ")*5000");
+    sheet.getRange(trgRow, trueLength + 4).setFormula("=sum(C" + trgRow + ":" + NumberToAbc(String(totalNumber - littleNum - mamaNum - 4)) + trgRow + ")*5000");
+
+    // sheet.getRange(trgRow, trueLength + 5).setFormula("=sum(W" + trgRow + ":X" + trgRow + ")*4000");
+    sheet.getRange(trgRow, trueLength + 5).setFormula("=sum(" + NumberToAbc(String(totalNumber - littleNum - mamaNum - 2)) + trgRow + ":" + NumberToAbc(String(totalNumber - mamaNum - 3)) + trgRow + ")*4000");
+
+    // sheet.getRange(trgRow, trueLength + 6).setFormula("=if(Y" + trgRow + ">=3,-1000*(Y" + trgRow + "-2),0)");
+    sheet.getRange(trgRow, trueLength + 6).setFormula("=if("+ NumberToAbc(String(totalNumber)) + trgRow + ">=3,-1000*(" + NumberToAbc(String(totalNumber)) + trgRow + "-2),0)");
+
     sheet.insertRowAfter(trgRow);
 
     for (var i = 0; i < trueLength; i++) {
@@ -170,6 +191,36 @@ function SearchMamaLine(sheet) {
 }
 
 
+function CountGray(allClassList) {
+  var ary = new Array(); 
+
+  for (var i = 0; i <= allClassList.length; i++) {
+    if (allClassList[i] == "A" || allClassList[i] == "B" || allClassList[i] == "C") {
+      ary.push(i)
+    }
+  }
+  console.log("ary:" + ary)
+  return ary;
+}
+
+// 数値をアルファベットに変更する関数
+function NumberToAbc(iCol) {
+  var str = "";
+  var iAlpha = 0;
+  var iRemainder = 0;
+
+  iAlpha = parseInt((iCol / 26), 10);
+  iRemainder = iCol - (iAlpha * 26);
+  if (iAlpha > 0) {
+    str = String.fromCharCode(iAlpha + 64);
+  }
+  if (iRemainder >= 0) {
+    str = str + String.fromCharCode(iRemainder + 65);
+  }
+  return str;
+}
+
+
 function printError(error) {
 
   var mailTitle = "エラー通知";
@@ -185,21 +236,5 @@ function printError(error) {
     "[場所] " + error.fileName + "(" + error.lineNumber + "行目)\n" +
     "[メッセージ]" + error.message + "\n" +
     "[StackTrace]\n" + error.stack;
-}
-
-function demo() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("顧客名簿");
-  var nameList = sheet.getRange("A1:A").getValues();
-  console.log(nameList)
-  var listLength = nameList.length;
-  console.log(listLength)
-
-  for (var i = 0; i < listLength; i++) {
-    if (nameList[i] == "ママさんクラス") {
-      var mamaLine = i;
-      console.log(mamaLine)
-      return mamaLine;
-    }
-  }
 }
 
