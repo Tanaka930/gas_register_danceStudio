@@ -1,5 +1,8 @@
 function onFormSubmit(e) {
 
+  //openstoreアカウントのアドレス
+  COMPANY_MAIL = PropertiesService.getScriptProperties().getProperty("COMPANY_MAIL");
+
   const lock = LockService.getScriptLock();
   try {
     // ロックを取得する
@@ -230,7 +233,7 @@ function printError(error) {
     "[メッセージ]" + error.message + "\n\n" +
     "[StackTrace]\n" + error.stack;
 
-  GmailApp.sendEmail('yuma.tanaka@openstore-japan.com', mailTitle, mailText);
+  GmailApp.sendEmail(COMPANY_MAIL, mailTitle, mailText);
 
   return "[名前] " + error.name + "\n" +
     "[場所] " + error.fileName + "(" + error.lineNumber + "行目)\n" +
