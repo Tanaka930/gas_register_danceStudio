@@ -1,4 +1,4 @@
-# new_danceStudio
+# register_danceStudio
 ダンススタジオ入会者登録用
 
 形式：　コンテナバインドスクリプト
